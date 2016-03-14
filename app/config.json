@@ -1,0 +1,28 @@
+{
+  "VERSION": "0.0.1",
+  "PRODUCT_NAME": "DockWriter",
+  "DEFAULT_FILE_TITLE": "Title",
+  "DEFAULT_FOLDER_NAME": "New folder",
+  "EDITOR_DEFAULT_PADDING": "35",
+  "CHECK_ONLINE_PERIOD": "120000",
+  "AJAX_TIMEOUT": "30000",
+  "ASYNC_TASK_DEFAULT_TIMEOUT": "60000",
+  "ASYNC_TASK_LONG_TIMEOUT": "180000",
+  "USER_IDLE_THRESHOLD": "300000",
+  "IMPORT_FILE_MAX_CONTENT_SIZE": "100000",
+  "IMPORT_IMG_MAX_CONTENT_SIZE": "10000000",
+  "NEDB_PAGE_SIZE": "25",
+  "NEDB_DATA_PATH": "data/documents.nedb",
+  "TEMPORARY_FILE_INDEX": "file.tempIndex",
+  "MAIN_URL": "",
+  "WELCOME_DOCUMENT_TITLE": "Hello!",
+  "THEME_LIST": {
+    "blue": "Blue",
+    "default": "Default",
+    "gray": "Gray",
+    "night": "Night",
+    "school": "School",
+    "solarized-light": "Solarized Light",
+    "solarized-dark": "Solarized Dark"
+  }
+}

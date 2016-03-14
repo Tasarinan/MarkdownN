@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <meta name="apple-touch-fullscreen" content="yes">
+        <meta name=”apple-mobile-web-app-capable” content=”yes” />
+        <meta name="keywords" content="DockWriter, Dockable writer">
+        <meta name="description" content="Full-featured, open-source dockable writer based on markdown, the Markdown library used by Stack Overflow">
+        <title>Dockable Writer</title>
+        <script type="application/javascript">
+        window.baseDir = '.';
+        var path = require('path');
+        // Load our LESS stylesheets.
+        // Eventually these will be pre-generated as part of the build process. But
+        // as there is no build process yet...
+        require('./modules/load').loadLess(path.join(path.resolve(__dirname,'./'), 'themes', 'default.less'));
+      </script>
+
+    </head>
+
+    <body style="display:none;">
+        <script type="application/javascript">
+            window.$ = window.jQuery = require("jquery");
+            require("bootstrap");
+            require('./main.js');
+          </script>
+    </body>
+
+</html>

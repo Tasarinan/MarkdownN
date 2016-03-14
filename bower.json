@@ -1,0 +1,18 @@
+{
+  "name": "dockwriter",
+  "version": "0.0.1",
+  "description": "dockwriter is a free,open-source docked writer manager which includes a markdown editor based on PageDown. The application is based on electron platform and some ideas were brought  out from leanNote",
+  "dependencies": {},
+  "overrides": {
+    "open-sans-fontface": {
+      "main": [
+        "open-sans.scss",
+        "fonts/**/*"
+      ]
+    }
+  },
+  "main": [
+    "/public/res/main.js",
+    "/public/res/styles/jquery.jgrowl.css"
+  ]
+}

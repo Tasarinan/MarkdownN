@@ -1,0 +1,13 @@
+{
+    "curly": true,
+    "esnext":true,
+    "node": true,
+    "jquery":true,
+    "indent": 4,
+    "latedef": true,
+    "undef": true,
+    "unused": true,
+    "expr": true,
+    "globals": {
+    "$": false}
+}
