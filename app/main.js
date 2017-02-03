@@ -17,23 +17,23 @@ var core = require('./modules/core');
 
 // Check browser compatibility
 try {
-	var test = 'seLocalStorageCheck';
-	localStorage.setItem(test, test);
-	localStorage.removeItem(test);
-	var obj = {};
-	Object.defineProperty(obj, 'prop', {
-		get: function () {},
-		set: function () {}
-	});
+  var test = 'seLocalStorageCheck';
+  localStorage.setItem(test, test);
+  localStorage.removeItem(test);
+  var obj = {};
+  Object.defineProperty(obj, 'prop', {
+    get: function () {},
+    set: function () {}
+  });
 } catch (e) {
-	alert('Your browser is not supported, sorry!');
-	throw e;
+  window.alert('Your browser is not supported, sorry!');
+  throw e;
 }
 
 $(function () {
-	// Keep the theme in a global variable
-	window.theme = localStorage.themeV4 || 'default';
-	// Here, all the modules are loaded and the DOM is ready
-	core.onReady();
-	$('body').fadeIn('50');
+  // Keep the theme in a global variable
+  window.theme = localStorage.themeV4 || 'default';
+  // Here, all the modules are loaded and the DOM is ready
+  core.onReady();
+  $('body').fadeIn('50');
 });

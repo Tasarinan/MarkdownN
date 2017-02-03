@@ -4,7 +4,7 @@ var Extension = require(path.resolve(__dirname, '../modules/extension'));
 var utils = require(path.resolve(__dirname, '../modules/utils'));
 var load = require(path.resolve(__dirname, '../modules/load'));
 
-var _ = require('underscore');
+var _ = require('lodash');
 
 var buttonStat = new Extension("buttonStat", 'Button "Statistics"', true);
 var buttonStatSettingsBlockHTML = load.loadHtml(

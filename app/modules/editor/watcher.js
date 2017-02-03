@@ -1,15 +1,14 @@
 // Used to detect editor changes
-
-var MutationObserver = require('mutationobservers');
+var MutationObserver = require('mutation-observer');
 
 function Watcher() {
   this.isWatching = false;
   var contentObserver;
-  this.startWatching = function (contentElt, checkContentChange) {
+  this.startWatching = function () {
     this.isWatching = true;
     contentObserver = contentObserver || new MutationObserver(
-      checkContentChange);
-    contentObserver.observe(contentElt, {
+      editor.checkContentChange);
+    contentObserver.observe(editor.contentElt, {
       childList: true,
       subtree: true,
       characterData: true

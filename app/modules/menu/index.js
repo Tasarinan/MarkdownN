@@ -33,6 +33,9 @@ var handlers = {
   saveAsHtml: function () {
     messenger.publish.menu('saveAsHtml');
   },
+  saveAsPDF: function () {
+    messenger.publish.menu('saveAsPDF');
+  },
   quit: function () {
     messenger.publish.menu('quit');
   },
@@ -94,12 +97,35 @@ var template = [{
     accelerator: 'CmdOrCtrl+Shift+H',
     click: handlers.saveAsHtml
   }, {
+    label: 'Save As PDF',
+    accelerator: 'CmdOrCtrl+Shift+P',
+    click: handlers.saveAsPDF
+  }, {
     type: 'separator'
   }, {
     label: 'Quit',
     accelerator: 'CmdOrCtrl+Q',
     click: handlers.quit
   }, ]
+}, {
+  label: 'Publish',
+  submenu: [{
+    label: 'Github',
+    accelerator: 'CmdOrCtrl+G',
+    click: handlers.github
+  }, {
+    label: 'SSH Server',
+    accelerator: 'CmdOrCtrl+P+S',
+    click: handlers.sshServer
+  }, {
+    label: 'WordPress',
+    accelerator: 'CmdOrCtrl+P+W',
+    click: handlers.wordPress
+  }, {
+    label: 'Blog Server',
+    accelerator: 'CmdOrCtrl+P+B',
+    click: handlers.blogger
+  }]
 }, {
   label: 'View',
   submenu: [{

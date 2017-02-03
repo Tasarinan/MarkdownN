@@ -1,4 +1,5 @@
 /*jslint browser:true*/
+/*jshint -W020 */
 module = module.exports;
 var
   path = require('path'),

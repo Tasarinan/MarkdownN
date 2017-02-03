@@ -16,6 +16,13 @@ It was also very quick to write and lets me add in [features](#Features) that I 
 
 5. **Save As HTML**: From the `File` menu you can select to save your current document as HTML or you can use the `CTRL + SHIFT + H` shortcut.
 
+6. **Integration**: You can upload your file to *Evernote*,*workflowy*,*github*,*wechat*
+
+7. **Customization**: Supports editor customized function like themes,font size etc
+
+
+
+
 
 ## Setting Up and Running
 

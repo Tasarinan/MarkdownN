@@ -1,6 +1,6 @@
 window.$ = window.jQuery = require("jquery");
 var path = require('path');
-var _ = require('underscore');
+var _ = require('lodash');
 var crel = require('crel');
 var Extension = require(path.resolve(__dirname, '../modules/extension'));
 

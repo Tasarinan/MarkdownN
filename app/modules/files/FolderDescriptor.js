@@ -4,7 +4,7 @@ module = module.exports;
 var path = require('path');
 var fileSystem = require(path.resolve(__dirname, './fileSystem'));
 var utils = require(path.resolve(__dirname, '../utils'));
-var _ = require('underscore');
+var _ = require('lodash');
 var storage = require('local-storage');
 
 function FolderDescriptor(folderIndex, name) {

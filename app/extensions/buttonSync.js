@@ -3,9 +3,8 @@ var path = require('path');
 var Extension = require(path.resolve(__dirname, '../modules/extension'));
 var utils = require(path.resolve(__dirname, '../modules/utils'));
 var load = require(path.resolve(__dirname, '../modules/load'));
-
-
-var _ = require('underscore');
+var synchronizer = require(path.resolve(__dirname, '../modules/synchronizer'));
+var _ = require('lodash');
 var crel = require('crel');
 var mousetrap = require('mousetrap');
 var buttonSync = new Extension("buttonSync", 'Button "Synchronize"',

@@ -1,6 +1,5 @@
 /*jslint browser:true*/
-/*jshint -W020 */
-module = module.exports;
+
 var path = require('path');
 var utils = require(path.resolve(__dirname, '../utils'));
 var storage = require('local-storage');
@@ -183,4 +182,4 @@ FileDescriptor.prototype.composeTitle = function (createLinks) {
   return result.join('');
 };
 
-module = FileDescriptor;
+module.exports = FileDescriptor;

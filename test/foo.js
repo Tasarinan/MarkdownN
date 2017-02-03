@@ -1,13 +1,17 @@
-var editor = {
-  a: null,
-  b: null
+var isOffline = false;
+var testA = {};
+
+
+function changeOffline() {
+  if (isOffline === true) {
+    isOffline = false;
+  } else {
+    isOffline = true;
+  }
+}
+
+testA.output = function () {
+  console.log(isOffline);
 };
-
-
-
-editor.out = function () {
-  console.log(editor.a);
-};
-
-
-module.exports = editor;
+changeOffline();
+module.exports = testA;

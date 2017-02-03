@@ -74,6 +74,7 @@
 		<button class="btn toggle-button" title="Menu">
 			<img
 				data-app-src="menu-icon.png" width="24" height="24" />
+				
 		</button>
 		<div class="panel-content">
 			<div class="list-group">
@@ -1131,6 +1132,12 @@
 									</div>
 									<div class="radio">
 										<label> <input type="radio"
+											name="radio-settings-editor-font-class" value="font-rich-monospaced">
+											Rich Monospaced
+										</label>
+									</div>
+									<div class="radio">
+										<label> <input type="radio"
 											name="radio-settings-editor-font-class" value="font-monospaced">
 											Monospaced
 										</label>
@@ -1330,6 +1337,27 @@
 </div>
 
 
+<div class="modal fade modal-non-unique">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h2 class="modal-title">Ooops...</h2>
+			</div>
+			<div class="modal-body">
+				<p>Editor has stopped because another instance was running in
+					the same browser.</p>
+				<blockquote>
+                    <p>If you want to reopen Editor, click on
+					"Reload".</p>
+                </blockquote>
+			</div>
+			<div class="modal-footer">
+				<a href="javascript:window.location.reload();"
+					class="btn btn-primary">Reload</a>
+			</div>
+		</div>
+	</div>
+</div>
 <div class="modal fade modal-redirect-confirm">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -1414,30 +1442,3 @@
 		</div>
 	</div>
 </div>
-
-
-<div class="modal fade modal-sponsor-only">
-	<div class="modal-dialog">
-		<div class="modal-content">
-
-			<div class="modal-header">
-				<h2 class="modal-title">Sponsor only!</h2>
-			</div>
-			<div class="modal-body">
-				<p>This feature is restricted to sponsor users as it's a web service hosted on Amazon EC2.
-                    Note that sponsoring StackEdit would cost you only $5/year.</p>
-				<p>To see how a PDF looks <a target="_blank" href="/Welcome%20document.pdf">click here</a>.</p>
-				<blockquote>
-                    <p><b>Tip:</b> PDFs are fully customizable via Settings>Advanced>PDF template/options.</p>
-                </blockquote>
-			</div>
-			<div class="modal-footer">
-				<a href="#" class="btn btn-primary"
-					data-dismiss="modal">Close</a>
-			</div>
-		</div>
-	</div>
-</div>
-
-
-<div id="dropboxjs" data-app-key="x0k2l8puemfvg0o"></div>

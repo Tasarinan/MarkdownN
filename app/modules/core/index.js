@@ -1,10 +1,10 @@
 /*global window*/
 /*jslint browser:true*/
-window.$ = window.jQuery = require("jquery");
+/*jshint -W020 */
+module = module.exports;
+//window.$ = window.jQuery = require("jquery");
 var path = require('path');
-var _ = require('underscore');
-var pagedown = require("pagedown");
-var pagedownExtra = require("pagedown-extra");
+var _ = require('lodash');
 var utils = require(path.resolve(__dirname, '../utils'));
 var storage = require('local-storage');
 var extMgr = require(path.resolve(__dirname, '../extMgr'));
@@ -21,9 +21,6 @@ var settingsTemplateTooltipHTML = load.loadHtml(
   'tooltipSettingsTemplate.html');
 var settingsPdfOptionsTooltipHTML = load.loadHtml(
   'tooltipSettingsPdfOptions.html');
-
-
-var core = {};
 
 // Load settings in settings dialog
 var $themeInputElt;
@@ -151,7 +148,7 @@ function saveSettings(event) {
 // Create the PageDown editor
 var pagedownEditor;
 var fileDesc;
-core.initEditor = function (fileDescParam) {
+module.initEditor = function (fileDescParam) {
   if (fileDesc !== undefined) {
     //eventMgr.onFileClosed(fileDesc);
     messenger.publish.extension('onFileClosed', fileDesc);
@@ -165,8 +162,7 @@ core.initEditor = function (fileDescParam) {
   }
 
   // Create the converter and the editor
-  //var converter = new Markdown.Converter();
-  var converter = new pagedown.Converter();
+  var converter = new Markdown.Converter();
 
   var options = {
     _DoItalicsAndBold: function (text) {
@@ -179,22 +175,22 @@ core.initEditor = function (fileDescParam) {
     }
   };
   converter.setOptions(options);
-  pagedownExtra.init(converter);
+
   pagedownEditor = new Markdown.Editor(converter, undefined, {
     undoManager: editor.undoMgr
   });
 
   // Custom insert link dialog
   pagedownEditor.hooks.set("insertLinkDialog", function (callback) {
-    core.insertLinkCallback = callback;
+    module.insertLinkCallback = callback;
     utils.resetModalInputs();
     $(".modal-insert-link").modal();
     return true;
   });
   // Custom insert image dialog
   pagedownEditor.hooks.set("insertImageDialog", function (callback) {
-    core.insertLinkCallback = callback;
-    if (core.catchModal) {
+    module.insertLinkCallback = callback;
+    if (module.catchModal) {
       return true;
     }
     utils.resetModalInputs();
@@ -204,7 +200,8 @@ core.initEditor = function (fileDescParam) {
 
   // eventMgr.onPagedownConfigure(pagedownEditor);
   messenger.publish.extension('onPagedownConfigure', pagedownEditor);
-  pagedownEditor.hooks.chain("onPreviewRefresh", eventMgr.onAsyncPreview);
+  //TODO
+  // pagedownEditor.hooks.chain("onPreviewRefresh", eventMgr.onAsyncPreview);
   pagedownEditor.run();
   editor.undoMgr.init();
 
@@ -244,7 +241,7 @@ core.initEditor = function (fileDescParam) {
 };
 
 // Initialize multiple things and then fire eventMgr.onReady
-core.onReady = function () {
+module.onReady = function () {
   // Add RTL class
   document.body.className += ' ' + settings.editMode;
 
@@ -256,6 +253,7 @@ core.onReady = function () {
 
   // Initialize utils library
   utils.init();
+  userMgr.init();
   // listen to online/offline events
   $(window).on('offline', userMgr.setOffline);
   $(window).on('online', userMgr.setOnline);
@@ -268,16 +266,14 @@ core.onReady = function () {
 
   layout.init();
   editor.init();
-  userMgr.init();
+
   //eventMgr.onReady();
-  messenger.publish.extension('onReady');
+  extMgr.onReady();
 };
 
 
 // Other initialization that are not prioritary
 //eventMgr.addListener("onReady", function () {
-
-
 messenger.subscribe.extension('onReady', function () {
   $(document.body).on('shown.bs.modal', '.modal', function () {
     var $elt = $(this);
@@ -305,24 +301,24 @@ messenger.subscribe.extension('onReady', function () {
   $(".action-insert-link").click(function (e) {
     var value = utils.getInputTextValue($("#input-insert-link"), e);
     if (value !== undefined) {
-      core.insertLinkCallback(value);
-      core.insertLinkCallback = undefined;
+      module.insertLinkCallback(value);
+      module.insertLinkCallback = undefined;
     }
   });
   $(".action-insert-image").click(function (e) {
     var value = utils.getInputTextValue($("#input-insert-image"), e);
     if (value !== undefined) {
-      core.insertLinkCallback(value);
-      core.insertLinkCallback = undefined;
+      module.insertLinkCallback(value);
+      module.insertLinkCallback = undefined;
     }
   });
 
   // Hide events on "insert link" and "insert image" dialogs
   $(".modal-insert-link, .modal-insert-image").on('hidden.bs.modal',
     function () {
-      if (core.insertLinkCallback !== undefined) {
-        core.insertLinkCallback(null);
-        core.insertLinkCallback = undefined;
+      if (module.insertLinkCallback !== undefined) {
+        module.insertLinkCallback(null);
+        module.insertLinkCallback = undefined;
       }
     });
 
@@ -477,5 +473,3 @@ messenger.subscribe.extension('onReady', function () {
   }
 
 });
-
-module.exports = core;

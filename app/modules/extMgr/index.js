@@ -2,14 +2,13 @@
 /*jshint -W020 */
 /*jslint browser:true*/
 window.$ = window.jQuery = require("jquery");
-var _ = require('underscore');
+var _ = require('lodash');
 var crel = require('crel');
 var mousetrap = require('mousetrap');
 var path = require('path');
 var load = require(path.resolve(__dirname, '../load'));
 var messenger = require(path.resolve(__dirname, '../messenger'));
 var Extension = require(path.resolve(__dirname, '../extension'));
-
 var settings = require(path.resolve(__dirname, '../settings'));
 var utils = require(path.resolve(__dirname, '../utils'));
 
@@ -25,8 +24,6 @@ var extensionList = require('require-all')({
     return argument instanceof Extension && argument;
   }
 });
-
-
 
 // Configure extensions
 var extensionSettings = settings.extensionSettings || {};

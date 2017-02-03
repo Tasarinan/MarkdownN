@@ -1,4 +1,4 @@
-var _ = require('underscore');
+var _ = require('lodash');
 var path = require('path');
 var config = require(path.resolve(__dirname, '../config')).get();
 var storage = require('local-storage');

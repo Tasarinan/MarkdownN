@@ -6,21 +6,21 @@ define([
 	"fileMgr",
 	"classes/Provider",
 	"classes/AsyncTask"
-], function($, constants, eventMgr, utils, fileMgr, Provider, AsyncTask) {
+], function ($, constants, eventMgr, utils, fileMgr, Provider, AsyncTask) {
 
 	var downloadProvider = new Provider("download");
 	downloadProvider.viewerSharingAttributes = [
 		"url"
 	];
 
-	downloadProvider.importPublic = function(importParameters, callback) {
+	downloadProvider.importPublic = function (importParameters, callback) {
 		var title;
 		var content;
 		var task = new AsyncTask(true);
-		task.onRun(function() {
+		task.onRun(function () {
 			var url = importParameters.url;
 			var slashUrl = url.lastIndexOf("/");
-			if(slashUrl === -1) {
+			if (slashUrl === -1) {
 				task.error(new Error("Invalid URL parameter."));
 				return;
 			}
@@ -31,30 +31,30 @@ define([
 				}),
 				dataType: 'text',
 				timeout: constants.AJAX_TIMEOUT
-			}).done(function(result) {
+			}).done(function (result) {
 				content = result;
 				task.chain();
-			}).fail(function() {
+			}).fail(function () {
 				task.error(new Error("Unable to access URL " + url));
 			});
 		});
-		task.onSuccess(function() {
+		task.onSuccess(function () {
 			callback(undefined, title, content);
 		});
-		task.onError(function(error) {
+		task.onError(function (error) {
 			callback(error);
 		});
 		task.enqueue();
 	};
 
-	eventMgr.addListener("onReady", function() {
-		$('.action-import-url').click(function(e) {
+	eventMgr.addListener("onReady", function () {
+		$('.action-import-url').click(function (e) {
 			var url = utils.getInputTextValue('#input-import-url', e);
-			if(url) {
+			if (url) {
 				downloadProvider.importPublic({
 					url: url
-				}, function(error, title, content) {
-					if(error) {
+				}, function (error, title, content) {
+					if (error) {
 						return;
 					}
 					var fileDesc = fileMgr.createFile(title, content);

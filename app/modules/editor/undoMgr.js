@@ -26,6 +26,9 @@ function UndoMgr() {
   var currentState;
   var selectionStartBefore;
   var selectionEndBefore;
+  this.setEditor = function (editorInstance) {
+    this.editor = editorInstance;
+  };
   this.setCommandMode = function () {
     this.currentMode = 'command';
   };
@@ -52,10 +55,10 @@ function UndoMgr() {
     currentState = {
       selectionStartBefore: selectionStartBefore,
       selectionEndBefore: selectionEndBefore,
-      selectionStartAfter: selectionMgr.selectionStart,
-      selectionEndAfter: selectionMgr.selectionEnd,
-      content: textContent,
-      discussionListJSON: fileDesc.discussionListJSON
+      selectionStartAfter: this.editor.selectionMgr.selectionStart,
+      selectionEndAfter: this.editor.selectionMgr.selectionEnd,
+      content: this.editor.textContent,
+      discussionListJSON: this.editor.fileDesc.discussionListJSON
     };
     lastTime = currentTime;
     lastMode = this.currentMode;
@@ -65,8 +68,8 @@ function UndoMgr() {
   this.saveSelectionState = _.debounce(function () {
     // Should happen just after saveState
     if (this.currentMode === undefined) {
-      selectionStartBefore = selectionMgr.selectionStart;
-      selectionEndBefore = selectionMgr.selectionEnd;
+      selectionStartBefore = this.editor.selectionMgr.selectionStart;
+      selectionEndBefore = this.editor.selectionMgr.selectionEnd;
     }
   }, 50);
   this.canUndo = function () {
@@ -78,33 +81,38 @@ function UndoMgr() {
 
   function restoreState(state, selectionStart, selectionEnd) {
     // Update editor
-    watcher.noWatch(function () {
-      if (textContent != state.content) {
-        setValueNoWatch(state.content);
-        fileDesc.content = state.content;
+    this.editor.watcher.noWatch(function () {
+      if (this.editor.textContent != state.content) {
+        this.editor.setValueNoWatch(state.content);
+        this.editor.fileDesc.content = state.content;
         //eventMgr.onContentChanged(fileDesc, state.content);
-        messenger.publish.file('onContentChanged', fileDesc);
+        messenger.publish.extension('onContentChanged', this.editor.fileDesc);
       }
-      selectionMgr.setSelectionStartEnd(selectionStart, selectionEnd);
-      selectionMgr.updateSelectionRange();
-      selectionMgr.updateCursorCoordinates(true);
-      var discussionListJSON = fileDesc.discussionListJSON;
+      this.editor.selectionMgr.setSelectionStartEnd(selectionStart, selectionEnd);
+      this.editor.selectionMgr.updateSelectionRange();
+      this.editor.selectionMgr.updateCursorCoordinates(true);
+      var discussionListJSON = this.editor.fileDesc.discussionListJSON;
       if (discussionListJSON != state.discussionListJSON) {
-        var oldDiscussionList = fileDesc.discussionList;
-        fileDesc.discussionListJSON = state.discussionListJSON;
-        var newDiscussionList = fileDesc.discussionList;
+        var oldDiscussionList = this.editor.fileDesc.discussionList;
+        this.editor.fileDesc.discussionListJSON = state.discussionListJSON;
+        var newDiscussionList = this.editor.fileDesc.discussionList;
         var diff = jsonDiffPatch.diff(oldDiscussionList, newDiscussionList);
         var commentsChanged = false;
         _.each(diff, function (discussionDiff, discussionIndex) {
           if (!_.isArray(discussionDiff)) {
             commentsChanged = true;
           } else if (discussionDiff.length === 1) {
-            eventMgr.onDiscussionCreated(fileDesc, newDiscussionList[discussionIndex]);
+            //eventMgr.onDiscussionCreated(fileDesc, newDiscussionList[discussionIndex]);
+            messenger.publish.extension('onDiscussionCreated', this.editor.fileDesc, newDiscussionList[
+              discussionIndex]);
           } else {
-            eventMgr.onDiscussionRemoved(fileDesc, oldDiscussionList[discussionIndex]);
+            //eventMgr.onDiscussionRemoved(fileDesc, oldDiscussionList[discussionIndex]);
+            messenger.publish.extension('onDiscussionRemoved', this.editor.fileDesc, oldDiscussionList[
+              discussionIndex]);
           }
         });
-        commentsChanged && eventMgr.onCommentsChanged(fileDesc);
+        //commentsChanged && eventMgr.onCommentsChanged(fileDesc);
+        commentsChanged && messenger.publish.extension('onCommentsChanged', this.editor.fileDesc);
       }
     });
 
@@ -114,7 +122,7 @@ function UndoMgr() {
     this.currentMode = undefined;
     lastMode = undefined;
     this.onButtonStateChange();
-    adjustCursorPosition();
+    this.editor.adjustCursorPosition();
   }
 
   this.undo = function () {
@@ -134,21 +142,21 @@ function UndoMgr() {
     restoreState.call(this, state, state.selectionStartAfter, state.selectionEndAfter);
   };
   this.init = function () {
-    var content = fileDesc.content;
+    var content = this.editor.fileDesc.content;
     undoStack = [];
     redoStack = [];
     lastTime = 0;
     currentState = {
-      selectionStartAfter: fileDesc.selectionStart,
-      selectionEndAfter: fileDesc.selectionEnd,
+      selectionStartAfter: this.editor.fileDesc.selectionStart,
+      selectionEndAfter: this.editor.fileDesc.selectionEnd,
       content: content,
-      discussionListJSON: fileDesc.discussionListJSON
+      discussionListJSON: this.editor.fileDesc.discussionListJSON
     };
     this.currentMode = undefined;
     lastMode = undefined;
-    contentElt.textContent = content;
+    this.editor.contentElt.textContent = content;
     // Force this since the content could be the same
-    checkContentChange();
+    this.editor.checkContentChangeCB();
   };
 }
 

@@ -1,7 +1,7 @@
   window.$ = window.jQuery = require("jquery");
   var path = require('path');
   var utils = require(path.resolve(__dirname, '../modules/utils'));
-  var _ = require('underscore');
+  var _ = require('lodash');
   var Extension = require(path.resolve(__dirname, '../modules/extension'));
   var load = require(path.resolve(__dirname, '../modules/load'));
   var buttonHtmlCode = new Extension("buttonHtmlCode", 'Button "HTML code"',

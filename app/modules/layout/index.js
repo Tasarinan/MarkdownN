@@ -1,14 +1,16 @@
-window.$ = window.jQuery = require("jquery");
-var _ = require('underscore');
+/*global window*/
+/*jslint browser:true*/
+/*jshint -W020 */
+module = module.exports;
+//window.$ = window.jQuery = require("jquery");
+var _ = require('lodash');
 var crel = require('crel');
 var mousetrap = require('mousetrap');
 var path = require('path');
-var utils = require(path.resolve(__dirname, '../utils/utils'));
-var eventMgr = require(path.resolve(__dirname, '../eventMgr'));
+var messenger = require(path.resolve(__dirname, '../messenger'));
+var utils = require(path.resolve(__dirname, '../utils'));
 var config = require(path.resolve(__dirname, '../config')).get();
-var settings = require(path.resolve(__dirname, '../settings/settings'));
-var hammer = require('hammerjs');
-var layout = {};
+var settings = require(path.resolve(__dirname, '../settings'));
 
 var resizerSize = 32;
 var togglerSize = 60;
@@ -164,19 +166,6 @@ DomObject.prototype.createToggler = function (backdrop) {
 		resizeAll();
 	};
 };
-DomObject.prototype.initHammer = function (drag) {
-	this.hammer = hammer(this.elt, {
-		drag: drag ? true : false,
-		drag_max_touches: 0,
-		gesture: false,
-		hold: false,
-		release: false,
-		swipe: drag ? false : true,
-		tap: false,
-		touch: false,
-		transform: false
-	});
-};
 
 var maxWidthMap = [{
 	screenWidth: 0,
@@ -267,7 +256,8 @@ function onResize() {
 	$navbarDropdownBtnElt.toggleClass('hide', navbarDropdownElt.children.length ===
 		0);
 
-	eventMgr.onLayoutResize();
+	//eventMgr.onLayoutResize();
+	messenger.publish.extension("onLayoutResize");
 }
 
 var isVertical = settings.layoutOrientation == "vertical";
@@ -413,7 +403,7 @@ function resizeAll() {
 	onResize();
 }
 
-layout.init = function () {
+module.init = function () {
 
 	var isModalShown = 0;
 	$(document.body).on('show.bs.modal', '.modal', function () {
@@ -540,46 +530,8 @@ layout.init = function () {
 		menuPanel.$elt.on('hidden.layout.toggle', function () {
 			isModalShown || editor.elt.focus();
 		});
-
-		// Gesture
-
-		/*
-		navbar.initHammer();
-		menuPanel.initHammer();
-		documentPanel.initHammer();
-		previewButtons.initHammer();
-
-		navbar.hammer.on('swiperight', _.bind(menuPanel.toggle, menuPanel, true));
-		navbar.hammer.on('swipeleft', _.bind(documentPanel.toggle, documentPanel, true));
-		navbar.hammer.on('swipeup', _.bind(navbar.toggle, navbar, false));
-
-		menuPanel.hammer.on('swiperight', _.bind(menuPanel.toggle, menuPanel, true));
-		menuPanel.hammer.on('swipeleft', _.bind(menuPanel.toggle, menuPanel, false));
-
-		documentPanel.hammer.on('swipeleft', _.bind(documentPanel.toggle, documentPanel, true));
-		documentPanel.hammer.on('swiperight', _.bind(documentPanel.toggle, documentPanel, false));
-		*/
-
-		previewResizer.initHammer(true);
-		var resizerInitialSize;
-		previewResizer.hammer.on('dragstart', function () {
-			resizerInitialSize = {
-				width: previewPanel.width,
-				height: previewPanel.height
-			};
-		}).on('drag', function (evt) {
-			if (isVertical) {
-				previewPanel.height = resizerInitialSize.height - evt.gesture.deltaY;
-			} else {
-				previewPanel.width = resizerInitialSize.width - evt.gesture.deltaX;
-			}
-			evt.gesture.preventDefault();
-			previewPanel.halfSize = false;
-			resizeAll();
-		});
 	}
 
-	previewButtons.initHammer(true);
 	previewButtons.adjustPosition = function () {
 		if (!previewButtons.isDragged) {
 			return;
@@ -593,27 +545,6 @@ layout.init = function () {
 		this.applyCss();
 	};
 
-
-	var buttonsInitialCoord;
-	previewButtons.hammer.on('dragstart', function () {
-		previewButtons.isOpen = true;
-		previewButtons.isDragged = true;
-		previewButtons.$elt.removeClass('closed animate');
-		wrapperL2.$elt.addClass('dragging');
-		buttonsInitialCoord = {
-			x: previewButtons.x,
-			y: previewButtons.y
-		};
-	}).on('drag', function (evt) {
-		previewButtons.x = buttonsInitialCoord.x + evt.gesture.deltaX;
-		previewButtons.y = buttonsInitialCoord.y + evt.gesture.deltaY;
-		previewButtons.adjustPosition();
-		evt.gesture.preventDefault();
-	}).on('dragend', function () {
-		wrapperL2.$elt.removeClass('dragging');
-		previewButtons.$elt.find('.btn-group').toggleClass('dropup', windowSize
-			.height / 2 > -previewButtons.y);
-	});
 
 	// Configure Mousetrap
 	mousetrap.stopCallback = function () {
@@ -657,7 +588,10 @@ layout.init = function () {
 	resizeAll();
 };
 
-eventMgr.addListener('onReady', function () {
+//eventMgr.addListener('onReady', function () {
+//module.onReady = function () {
+messenger.subscribe.extension('onReady', function () {
+
 	previewButtons.x = previewButtonsOffset.x;
 	previewButtons.y = previewButtonsOffset.y;
 	previewButtons.applyCss();
@@ -724,7 +658,8 @@ eventMgr.addListener('onReady', function () {
 	});
 });
 
-eventMgr.addListener('onExtensionButtonResize', function () {
+//eventMgr.addListener('onExtensionButtonResize', function () {
+messenger.subscribe.extension('onExtensionButtonResize', function () {
 	if (!previewButtons.isDragged) {
 		if (!previewButtons.isOpen) {
 			previewButtons.$elt.removeClass('animate');
@@ -739,6 +674,3 @@ eventMgr.addListener('onExtensionButtonResize', function () {
 		previewButtons.adjustPosition();
 	}
 });
-
-eventMgr.onLayoutCreated(layout);
-module.exports = layout;

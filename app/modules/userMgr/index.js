@@ -87,7 +87,7 @@ userMgr.checkOnline = function () {
       timeout: config.AJAX_TIMEOUT,
       dataType: "script"
     }).done(function () {
-      this.setOnline();
+      userMgr.setOnline();
     });
   }
 };
@@ -96,10 +96,11 @@ userMgr.init = function () {
   intervalId = window.setInterval(function () {
     utils.updateCurrentTime();
     checkWindowUnique();
-    if (this.isUserActive() === true || window.viewerMode === true) {
+    if (userMgr.isUserActive() === true || window.viewerMode === true) {
       //eventMgr.onPeriodicRun();
-      messenger.publish.extension('onPeriodicRun');
-      this.checkOnline();
+      //TODO
+    //  messenger.publish.extension('onPeriodicRun');
+      userMgr.checkOnline();
     }
   }, 1000);
 };
